@@ -29,7 +29,7 @@ RSpec.describe 'Meta boards', type: :request do
     before { get "/v1/meta/board/#{bid}" }
 
     context 'when the record exists' do
-      it 'returns the todo' do
+      it 'returns the board' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(bid)
       end
@@ -55,7 +55,7 @@ RSpec.describe 'Meta boards', type: :request do
     context 'when the request is valid' do
       before { post '/v1/meta/board', params: valid_attributes }
 
-      it 'creates a todo' do
+      it 'creates a board' do
         expect(json['title']).to eq('cbse')
       end
 

@@ -33,3 +33,11 @@ Board.first_or_create(
 # Board.create("title": "Tamil Nadu State Board",
 # "name": "Tamil Nadu Board of Higher Secondary Education",
 # "image":"/tnsb")
+
+# for i in 5..12
+#     Classn.create(title:i)
+# end
+
+# Subject.create(title:'Math',image:'\mathpic')
+# Subject.create(title:'Geography',image:'\geo')
+# Subject.create(title:'Physics',image:'\phy')
