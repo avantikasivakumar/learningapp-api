@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_01_054103) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_01_074549) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,28 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_01_054103) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "classns", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.bigint "board_id"
+    t.bigint "subject_id"
+    t.bigint "classn_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["board_id"], name: "index_courses_on_board_id"
+    t.index ["classn_id"], name: "index_courses_on_classn_id"
+    t.index ["subject_id"], name: "index_courses_on_subject_id"
+  end
+
+  create_table "courses_users", id: false, force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "user_id", null: false
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|
@@ -34,6 +56,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_01_054103) do
     t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "subjects", force: :cascade do |t|
+    t.string "title"
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -55,4 +84,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_01_054103) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "courses", "boards"
+  add_foreign_key "courses", "classns"
+  add_foreign_key "courses", "subjects"
 end
