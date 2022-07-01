@@ -36,7 +36,7 @@ module V1
 
             def bparams
                 # whitelist params
-                params.permit(:name, :image)
+                params.permit(:title, :image)
             end
 
             def set_subject

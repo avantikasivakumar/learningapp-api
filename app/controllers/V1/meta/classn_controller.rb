@@ -1,7 +1,7 @@
 module V1
     module Meta
         class Meta::ClassnController < ApplicationController
-            before_action :set_class, only: [:show, :update, :destroy]
+            before_action :set_classn, only: [:show, :update, :destroy]
 
             #GET v1/meta/classn
             def index
