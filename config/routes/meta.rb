@@ -1,7 +1,7 @@
 namespace :v1 do
     namespace :meta do
-        resources :board#, only: %i[show]
-        resources :classn
-        resources :subject
+        resources :board, only: %i[index]
+        resources :classn, only: %i[index]
+        resources :subject, only: %i[index]
     end
 end

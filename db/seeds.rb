@@ -41,3 +41,16 @@ Board.first_or_create(
 # Subject.create(title:'Math',image:'\mathpic')
 # Subject.create(title:'Geography',image:'\geo')
 # Subject.create(title:'Physics',image:'\phy')
+# Subject.create(title:'Biology',image:'\bio')
+# Subject.create(title:'Chemistry',image:'\chem')
+# boards=[1,2,3]
+# classes=[1,2,3,4,5,6,7,8]
+# subjects=[1,2,3,4,5]
+
+# for board in boards
+#     for clas in classes
+#         for subject in subjects
+#             Course.create!(board_id:board,classn_id:clas,subject_id:subject)
+#         end
+#     end
+# end

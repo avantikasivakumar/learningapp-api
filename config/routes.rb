@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   draw :user_management
   draw :meta
+  draw :course_management
   # Defines the root path route ("/")
   # root "articles#index"
 

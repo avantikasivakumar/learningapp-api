@@ -6,7 +6,7 @@ ruby "3.0.0"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.3"
 gem 'devise'
-gem 'sendotp'
+gem 'active_model_serializers', '~> 0.10.0'
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 
