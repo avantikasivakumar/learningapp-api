@@ -1,7 +1,8 @@
 namespace :v1 do
     namespace :user_management do
-        resources :user, only: %i[create]
-        resources :session, only: %i[create destroy]
+        post "/signup", to: "user#create"
+        post "/login", to: "session#create"
+        delete "/logout", to: "session#destroy"
     end
 end
 

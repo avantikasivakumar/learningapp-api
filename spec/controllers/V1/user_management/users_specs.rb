@@ -18,7 +18,7 @@ RSpec.describe 'User management', type: :request do
 
 
         context 'when the request is valid' do
-            before { post '/v1/user_management/user', params: {name:name,email:email,dob:dob,mobile:mobile,password:password } }
+            before { post '/v1/user_management/signup', params: {name:name,email:email,dob:dob,mobile:mobile,password:password } }
 
             it 'creates a user' do
                 expect(json).not_to be_empty
@@ -32,7 +32,7 @@ RSpec.describe 'User management', type: :request do
         end
 
         context 'when the request is invalid' do
-        before { post '/v1/user_management/user', params: { user:{email:invalidmail}}}#, password: '123' } }
+        before { post '/v1/user_management/signup', params: { user:{email:invalidmail}}}#, password: '123' } }
 
         it 'returns status code 422' do
             expect(response).to have_http_status(422)
@@ -47,7 +47,7 @@ RSpec.describe 'User management', type: :request do
     
           let(:valid_attributes) {{ email: user.email,password: "Password",grant_type: "password"}}
     
-          before { post '/v1/user_management/session', params: valid_attributes, as: :json }
+          before { post '/v1/user_management/login', params: valid_attributes, as: :json }
     
           it 'Token generated' do
             expect(json).not_to be_empty
@@ -62,7 +62,7 @@ RSpec.describe 'User management', type: :request do
 
             let(:valid_attributes) { {grant_type: "refresh_token",refresh_token: valid_headers[:other]['refresh-token']}}
       
-            before { post '/v1/user_management/session', params: valid_attributes, as: :json }
+            before { post '/v1/user_management/login', params: valid_attributes, as: :json }
       
             it 'Token generated' do
               expect(json).not_to be_empty
@@ -107,7 +107,7 @@ RSpec.describe 'User management', type: :request do
     describe 'Logout' do
         let!(:user) {create(:user)}
         context 'when the request is valid' do
-            before { delete '/v1/user_management/session/:id', headers: valid_headers[:auth] }
+            before { delete '/v1/user_management/logout', headers: valid_headers[:auth] }
     
             it 'Token Empty' do
               expect(response).to have_http_status(200)
