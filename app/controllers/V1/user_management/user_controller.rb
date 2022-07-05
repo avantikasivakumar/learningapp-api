@@ -1,8 +1,8 @@
 module V1
   module UserManagement
       class UserManagement::UserController < ApplicationController
-        before_action :doorkeeper_authorize!
-        skip_before_action :doorkeeper_authorize!, only: %i[create]
+        #before_action :doorkeeper_authorize!
+        #skip_before_action :doorkeeper_authorize!, only: %i[create]
     
         def create
           user = User.new(email: user_params[:email], password: user_params[:password], name: user_params[:name], dob: user_params[:dob], mobile: user_params[:mobile])
@@ -20,10 +20,10 @@ module V1
               expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
               scopes: ''
             )
-            
+
             # return json containing access token and refresh token
             # so that user won't need to call login API right after registration
-            render(json: {
+            render json: {
               user: {
                 id: user.id,
                 email: user.email,
@@ -33,9 +33,9 @@ module V1
                 refresh_token: access_token.refresh_token,
                 created_at: access_token.created_at.to_time.to_i
               }
-            })
+            }
           else
-            render(json: { error: user.errors.full_messages }, status: 422)
+            render json: { error: user.errors.full_messages }, status: 422
           end
         end
     

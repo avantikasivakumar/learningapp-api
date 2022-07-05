@@ -5,7 +5,8 @@ RSpec.describe 'User management', type: :request do
     # initialize test data
     let!(:users) { create_list(:user, 10) }
     let(:user_id) { users.first.id }
-  
+    let!(:user) {create(:user)}
+    let!(:valid_headers) { auth_headers(user) }
     # Test suite for POST /v1/user_management/user
     describe 'Sign Up' do
         let (:invalidmail) { "peppa@rq.com" }
@@ -21,13 +22,17 @@ RSpec.describe 'User management', type: :request do
 
             it 'creates a user' do
                 expect(json).not_to be_empty
-                expect(json["user"]).not_to be_empty
+                expect(json["user"]["access_token"]).not_to be_empty
+                expect(json["user"]["refresh_token"]).not_to be_empty
+                expect(json["user"]["expires_in"]).to eq(7200)
+                expect(json["user"]["token_type"]).to eq('bearer')
+                expect(json["user"]["email"]).to eq(email)
                 expect(response).to have_http_status(200)
             end
         end
 
         context 'when the request is invalid' do
-        before { post '/v1/user_management/user', params: { email:invalidmail } }
+        before { post '/v1/user_management/user', params: { user:{email:invalidmail}}}#, password: '123' } }
 
         it 'returns status code 422' do
             expect(response).to have_http_status(422)
@@ -37,51 +42,81 @@ RSpec.describe 'User management', type: :request do
 
     # Test suite for POST /v1/user_management/session
     describe 'Login' do
-        let (:email) { users.first.email }
-        let (:password) {Faker::Lorem.characters(number: 4)}
-
-
-        context 'when the request is valid' do
-            before { post '/v1/user_management/session', params: {email:email,password:users.first.password } }
-
-            it 'signs in the user' do
-                expect(json).not_to be_empty
-            #    expect(json["user"]).not_to be_empty
-                expect(response).to have_http_status(200)
-            end
+        let!(:user) {create(:user)}
+        context '(Valid email and password)' do
+    
+          let(:valid_attributes) {{ email: user.email,password: "Password",grant_type: "password"}}
+    
+          before { post '/v1/user_management/session', params: valid_attributes, as: :json }
+    
+          it 'Token generated' do
+            expect(json).not_to be_empty
+            expect(json["user"]).not_to be_empty
+            #raise response.body
+            expect(json["token"]).not_to be_empty
+            expect(response).to have_http_status(201)
+          end
         end
 
-        context 'when the request is invalid' do
-            before { post '/v1/user_management/session', params: { email:email,password:password } }
+        context '(Login by Refresh Token)' do
 
-            it 'returns status failed' do
-                expect(json["status"]).to eq('failed')
+            let(:valid_attributes) { {grant_type: "refresh_token",refresh_token: valid_headers[:other]['refresh-token']}}
+      
+            before { post '/v1/user_management/session', params: valid_attributes, as: :json }
+      
+            it 'Token generated' do
+              expect(json).not_to be_empty
+              expect(json["user"]).not_to be_empty
+              expect(json["token"]).not_to be_empty
+              expect(response).to have_http_status(201)
             end
         end
     end
+
+    #     let (:email) { users.first.email }
+    #     let (:password) {Faker::Lorem.characters(number: 4)}
+
+
+    #     context 'when the request is valid' do
+    #         before { post '/v1/user_management/session', params: {user:{email:email,password:password } } }
+            
+    #         it 'signs in the user' do
+    #             puts json
+    #             json=JSON.parse(response.body)
+    #             expect(JSON.parse(response.body)).not_to be_empty
+    #             expect(json["user"]["access_token"]).not_to be_empty
+    #             expect(json["user"]["refresh_token"]).not_to be_empty
+    #             expect(json["user"]["expires_in"]).to eq(7200)
+    #             expect(json["user"]["token_type"]).to eq('bearer')
+    #             expect(json["user"]["email"]).to eq(email)
+    #             expect(response).to have_http_status(200)
+    #         end
+    #     end
+
+    #     # context 'when the request is invalid' do
+    #     #     before { post '/v1/user_management/session', params: { email:email,password:'password' } }
+
+    #     #     it 'returns status failed' do
+    #     #         expect(json["status"]).to eq('failed')
+    #     #         expect(response).to have_http_status(401)
+    #     #     end
+    #     # end
+    # end
 
     # Test suite for DELETE /v1/user_management/session/:id
     describe 'Logout' do
-        let (:email) { users.first.email }
-        let (:password) {users.first.password}
-
-
+        let!(:user) {create(:user)}
         context 'when the request is valid' do
-            before { delete '/v1/user_management/session/:id', params: {email:email,password:users.first.password } }
-
-            it 'signs in the user' do
-                expect(json).not_to be_empty
-           #     expect(json[user]).not_to be_empty
-                expect(response).to have_http_status(200)
+            before { delete '/v1/user_management/session/:id', headers: valid_headers[:auth] }
+    
+            it 'Token Empty' do
+              expect(response).to have_http_status(200)
             end
-        end
-
-        context 'when the request is invalid' do
-            before { post '/v1/user_management/session', params: { email:email,password:password } }
-
-            it 'returns status failed' do
-                expect(json["status"]).to eq('failed')
-            end
-        end
+          end
+        #     it 'signs out the user' do
+        #         expect(response).to have_http_status(200)
+        #     end
+        # end
     end
+
 end

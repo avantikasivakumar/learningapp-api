@@ -54,3 +54,6 @@ Board.first_or_create(
 #         end
 #     end
 # end
+
+# Topic.create!(name:'Trig',course_id:'5')
+# Topic.create!(name:'functions',course_id:'5')

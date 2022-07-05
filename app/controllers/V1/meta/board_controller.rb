@@ -1,7 +1,7 @@
 module V1
     module Meta
         class Meta::BoardController < ApplicationController
-            before_action :set_board, only: [:show, :update, :destroy]
+           # before_action :set_board, only: [:show, :update, :destroy]
 
             #GET v1/meta/boards
             def index
