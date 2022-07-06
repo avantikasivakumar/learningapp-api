@@ -10,9 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_05_054001) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_06_102318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attempt_results", force: :cascade do |t|
+    t.bigint "attempt_id", null: false
+    t.bigint "question_id", null: false
+    t.boolean "result"
+    t.integer "timetaken"
+    t.boolean "attempted"
+    t.boolean "markedforreview"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attempt_id"], name: "index_attempt_results_on_attempt_id"
+    t.index ["question_id"], name: "index_attempt_results_on_question_id"
+  end
+
+  create_table "attempts", force: :cascade do |t|
+    t.bigint "exercise_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_attempts_on_exercise_id"
+    t.index ["user_id"], name: "index_attempts_on_user_id"
+  end
 
   create_table "boards", force: :cascade do |t|
     t.string "title"
@@ -48,6 +70,35 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_054001) do
     t.index ["user_id"], name: "index_courses_users_on_user_id"
   end
 
+  create_table "exercises", force: :cascade do |t|
+    t.string "name"
+    t.bigint "topic_id", null: false
+    t.integer "duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_exercises_on_topic_id"
+  end
+
+  create_table "materials", force: :cascade do |t|
+    t.string "file"
+    t.bigint "topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_materials_on_topic_id"
+  end
+
+  create_table "materialstats", force: :cascade do |t|
+    t.bigint "material_id", null: false
+    t.bigint "user_id", null: false
+    t.boolean "vote"
+    t.string "notes"
+    t.boolean "status", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["material_id"], name: "index_materialstats_on_material_id"
+    t.index ["user_id"], name: "index_materialstats_on_user_id"
+  end
+
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.bigint "resource_owner_id"
     t.string "token", null: false
@@ -60,6 +111,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_054001) do
     t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "q"
+    t.string "opt1"
+    t.string "opt2"
+    t.string "opt3"
+    t.string "opt4"
+    t.string "solution"
+    t.integer "correctoption"
+    t.bigint "exercise_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_questions_on_exercise_id"
   end
 
   create_table "subjects", force: :cascade do |t|
@@ -96,10 +161,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_054001) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "attempt_results", "attempts"
+  add_foreign_key "attempt_results", "questions"
+  add_foreign_key "attempts", "exercises"
+  add_foreign_key "attempts", "users"
   add_foreign_key "courses", "boards"
   add_foreign_key "courses", "classns"
   add_foreign_key "courses", "subjects"
   add_foreign_key "courses_users", "courses"
   add_foreign_key "courses_users", "users"
+  add_foreign_key "exercises", "topics"
+  add_foreign_key "materials", "topics"
+  add_foreign_key "materialstats", "materials"
+  add_foreign_key "materialstats", "users"
+  add_foreign_key "questions", "exercises"
   add_foreign_key "topics", "courses"
 end

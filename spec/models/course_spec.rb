@@ -5,4 +5,5 @@ RSpec.describe Course, type: :model do
   it { should belong_to(:classn) }
   it { should belong_to(:board) }
   it { should have_and_belong_to_many :user }
+  it { should have_many(:topic).dependent(:destroy) }
 end
