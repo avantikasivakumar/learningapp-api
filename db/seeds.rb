@@ -57,3 +57,12 @@ Board.first_or_create(
 
 # Topic.create!(name:'Trig',course_id:'5')
 # Topic.create!(name:'functions',course_id:'5')
+# Topic.create!(name:'functions',course_id:'7')
+# Material.create!(topic_id:1,file:'\mat1.pdf')
+# Material.create!(topic_id:1,file:'\mat2.mp4')
+# Material.create!(topic_id:1,file:'\mat3.mp4')
+# Material.create!(topic_id:2,file:'\mat4.mp4')
+# Material.create!(topic_id:2,file:'\mat5.pdf')
+
+# Exercise.create!(topic_id:1,name:'basics',duration:15)
+# Exercise.create!(topic_id:1,name:'fns',duration:45)
