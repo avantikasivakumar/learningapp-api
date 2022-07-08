@@ -7,6 +7,17 @@ RSpec.describe 'User management', type: :request do
     let(:user_id) { users.first.id }
     let!(:user) {create(:user)}
     let!(:valid_headers) { auth_headers(user) }
+
+    describe 'Profile' do
+      before { get '/v1/user_management/profile', headers: valid_headers[:auth] }
+
+      it 'returns profile details' do
+        expect(json).not_to be_empty
+        expect(response).to have_http_status(200)
+      end
+    end
+
+
     # Test suite for POST /v1/user_management/user
     describe 'Sign Up' do
         let (:invalidmail) { "peppa@rq.com" }

@@ -5,10 +5,12 @@ namespace :v1 do
         get "/question/:id", to: "questions#show"
         post "/question/:id", to: "questions#select"
 
+        get "/material/stat/:id", to: "materialstat#details"
         post "/material/vote/:id", to: "materialstat#vote"
         post "/material/edit/:id", to: "materialstat#editnotes"
         post "/material/done/:id", to: "materialstat#completed"
 
-        post "/exercise/summary/:id", to: "attempt_results#summary"
+        post "/exercise/summary/:id", to: "attemptresults#summary"
+        post "/exercise/results/:id", to: "attemptresults#results"
     end
 end

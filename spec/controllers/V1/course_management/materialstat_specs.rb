@@ -42,4 +42,13 @@ RSpec.describe 'Material management', type: :request do
     end
   end
 
+  describe 'details' do
+    before { get "/v1/course_management/material/stat/#{mat.id}",headers: valid_headers[:auth], as: :json}
+
+    it 'votes' do
+      expect(json).to_not be_empty
+      expect(response).to have_http_status(200)
+    end
+  end
+
 end

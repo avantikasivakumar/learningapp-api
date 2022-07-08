@@ -18,6 +18,10 @@ class V1::CourseManagement::MaterialstatController < V1::ApplicationController
         json_response(Materialstat.find_by(material_id:params[:id],user_id:current_user.id))
     end
 
+    def details
+        render json: Materialstat.where(material_id:params[:id],user_id:current_user.id), status:200
+    end
+
     private
 
     def mat_params

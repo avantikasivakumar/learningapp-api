@@ -1,6 +1,7 @@
 namespace :v1 do
     namespace :user_management do
         post "/signup", to: "user#create"
+        get "/profile", to: "user#profile"
         post "/login", to: "session#create"
         delete "/logout", to: "session#destroy"
     end

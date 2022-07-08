@@ -2,7 +2,7 @@ module V1
   module UserManagement
       class UserManagement::UserController < ApplicationController
         #before_action :doorkeeper_authorize!
-        #skip_before_action :doorkeeper_authorize!, only: %i[create]
+        before_action :doorkeeper_authorize!, only: %i[profile]
     
         def create
           user = User.new(email: user_params[:email], password: user_params[:password], name: user_params[:name], dob: user_params[:dob], mobile: user_params[:mobile])
@@ -37,6 +37,10 @@ module V1
           else
             render json: { error: user.errors.full_messages }, status: 422
           end
+        end
+
+        def profile
+          render json: current_user, status: 200
         end
     
         private

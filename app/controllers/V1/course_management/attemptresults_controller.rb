@@ -1,11 +1,20 @@
-class V1::CourseManagement::AttemptResultsController < V1::ApplicationController
+class V1::CourseManagement::AttemptresultsController < V1::ApplicationController
     before_action :doorkeeper_authorize!
 
     #get all questions in an attempt
  #   post "v1/course_management/exercise/summary/:id"
     def summary
-        @summary=AttemptResult.where(attempt_id:(Attempt.where(exercise_id:params[:id]).id))
-        json_response(summary)
+        @summary=AttemptResult.where(attempt_id:params[:id])
+        render json: @summary, status: 200
+    end
+
+    def results
+        @qs=AttemptResult.where(attempt_id:params[:id]).count
+        @score=AttemptResult.where(attempt_id:params[:id],result:true).count
+        @accuracy=100*@score/@qs
+        @speed=AttemptResult.where(attempt_id:params[:id]).average(:timetaken)
+        @duration=AttemptResult.where(attempt_id:params[:id]).sum(:timetaken)
+        render json: {score:@score,accuracy:@accuracy,speed:@speed,duration:@duration}, status:200
     end
 
 end
