@@ -14,9 +14,49 @@ RSpec.describe 'Meta subjects', type: :request do
     before { get '/v1/meta/subject' }
 
     it 'returns subjects' do
+     # puts json
       # Note `json` is a custom helper to parse JSON responses
       expect(json).not_to be_empty
       expect(json.size).to eq(10)
+      expect(json[0]["id"]).to eq(subjects[0]["id"])
+      expect(json[0]["image"]).to eq(subjects[0]["image"])
+      expect(json[0]["title"]).to eq(subjects[0]["title"])
+
+      expect(json[1]["id"]).to eq(subjects[1]["id"])
+      expect(json[1]["image"]).to eq(subjects[1]["image"])
+      expect(json[1]["title"]).to eq(subjects[1]["title"])
+
+      expect(json[2]["id"]).to eq(subjects[2]["id"])
+      expect(json[2]["image"]).to eq(subjects[2]["image"])
+      expect(json[2]["title"]).to eq(subjects[2]["title"])
+
+      expect(json[3]["id"]).to eq(subjects[3]["id"])
+      expect(json[3]["image"]).to eq(subjects[3]["image"])
+      expect(json[3]["title"]).to eq(subjects[3]["title"])
+
+      expect(json[4]["id"]).to eq(subjects[4]["id"])
+      expect(json[4]["image"]).to eq(subjects[4]["image"])
+      expect(json[4]["title"]).to eq(subjects[4]["title"])
+
+      expect(json[5]["id"]).to eq(subjects[5]["id"])
+      expect(json[5]["image"]).to eq(subjects[5]["image"])
+      expect(json[5]["title"]).to eq(subjects[5]["title"])
+
+      expect(json[6]["id"]).to eq(subjects[6]["id"])
+      expect(json[6]["image"]).to eq(subjects[6]["image"])
+      expect(json[6]["title"]).to eq(subjects[6]["title"])
+
+      expect(json[7]["id"]).to eq(subjects[7]["id"])
+      expect(json[7]["image"]).to eq(subjects[7]["image"])
+      expect(json[7]["title"]).to eq(subjects[7]["title"])
+
+      expect(json[8]["id"]).to eq(subjects[8]["id"])
+      expect(json[8]["image"]).to eq(subjects[8]["image"])
+      expect(json[8]["title"]).to eq(subjects[8]["title"])
+
+      expect(json[9]["id"]).to eq(subjects[9]["id"])
+      expect(json[9]["image"]).to eq(subjects[9]["image"])
+      expect(json[9]["title"]).to eq(subjects[9]["title"])
     end
 
     it 'returns status code 200' do

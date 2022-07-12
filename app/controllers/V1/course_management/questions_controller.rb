@@ -22,16 +22,17 @@ module V1
                 end
             end
 
-            #GET v1/course_management/question/:id
+            #GET v1/course_management/exercise/:id/questions
             def show
-                @question=Question.find_by(id:params[:id])
+                @question=Question.find_by(exercise_id:params[:id])
                 if @question != nil
                     @ex=Exercise.find_by(id:@question.exercise_id)
                     @topic=Topic.find_by(id:@ex.topic_id)
                     if (CoursesUser.where(user_id:current_user.id).where(course_id:@topic.course_id).count) == 0
                         render json: { error: 'Not enrolled' }, status: 422
                     else
-                        render json: { 'question': @question }, status:200
+                        render json: Question.where(exercise_id:params[:id]), each_serializer: QuestionSerializer
+                        #render json: { 'question': ActiveModel::Serializer.new(@question, each_serializer: QuestionSerializer).paginate(page: qparams[:page], per_page: 1)}, status:200
                         #json_response(@question)
                     end
                 else
@@ -72,7 +73,7 @@ module V1
             private
     
             def qparams
-            params.permit(:opt,:timetaken,:markedforreview)
+            params.permit(:opt,:timetaken,:markedforreview, :page)
             end
             
         end

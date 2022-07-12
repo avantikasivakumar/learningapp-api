@@ -17,6 +17,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_102318) do
   create_table "attempt_results", force: :cascade do |t|
     t.bigint "attempt_id", null: false
     t.bigint "question_id", null: false
+    t.integer "chosenoption"
     t.boolean "result"
     t.integer "timetaken"
     t.boolean "attempted"

@@ -1,6 +1,6 @@
 module RequestSpecHelper
   def json
-    # puts response.body
+    #puts response.body
     JSON.parse(response.body)
   end
   def auth_headers(user)

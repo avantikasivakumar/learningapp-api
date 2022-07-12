@@ -2,7 +2,7 @@ namespace :v1 do
     namespace :course_management do
         get "/courseselection", to: "courses#create"
         post "/exercise/:id", to: "questions#startex"
-        get "/question/:id", to: "questions#show"
+        get "/exercise/:id/questions", to: "questions#show"
         post "/question/:id", to: "questions#select"
 
         get "/material/stat/:id", to: "materialstat#details"

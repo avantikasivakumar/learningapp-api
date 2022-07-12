@@ -8,6 +8,8 @@ class V1::CourseManagement::AttemptresultsController < V1::ApplicationController
         render json: @summary, status: 200
     end
 
+    def 
+
     def results
         @qs=AttemptResult.where(attempt_id:params[:id]).count
         @score=AttemptResult.where(attempt_id:params[:id],result:true).count

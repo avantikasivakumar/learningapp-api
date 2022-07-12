@@ -5,8 +5,7 @@ module V1
 
             #GET v1/meta/subject
             def index
-            @subjects = Subject.all
-            json_response(@subjects)
+            render json: Subject.all, each_serializer:SubjectSerializer
             end
 
             # # POST /v1/meta/subject

@@ -7,6 +7,8 @@ ruby "3.0.0"
 gem "rails", "~> 7.0.3"
 gem 'devise'
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'will_paginate', '~> 3.1.0'
+# [...]
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 
