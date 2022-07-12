@@ -31,7 +31,7 @@ module V1
                     if (CoursesUser.where(user_id:current_user.id).where(course_id:@topic.course_id).count) == 0
                         render json: { error: 'Not enrolled' }, status: 422
                     else
-                        render json: Question.where(exercise_id:params[:id]), each_serializer: QuestionSerializer
+                        render json: Question.where(exercise_id:params[:id]), each_serializer: SimpleQuestionSerializer
                         #render json: { 'question': ActiveModel::Serializer.new(@question, each_serializer: QuestionSerializer).paginate(page: qparams[:page], per_page: 1)}, status:200
                         #json_response(@question)
                     end

@@ -12,5 +12,6 @@ namespace :v1 do
 
         post "/exercise/summary/:id", to: "attemptresults#summary"
         post "/exercise/results/:id", to: "attemptresults#results"
+        post "/exercise/result/:id", to: "attemptresults#result"
     end
 end
