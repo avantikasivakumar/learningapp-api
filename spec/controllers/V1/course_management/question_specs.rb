@@ -61,7 +61,7 @@ RSpec.describe 'Question management', type: :request do
     before { post '/v1/course_management/question/1', params:{opt:1,timetaken:29,markedforreview:false}, headers: valid_headers[:auth], as: :json}
 
     it 'updates attempt result' do
-      #  puts json
+        puts json
         expect(json["result"]).to eq(true)
         expect(json["timetaken"]).to eq(29)
         expect(json["markedforreview"]).to eq(false)

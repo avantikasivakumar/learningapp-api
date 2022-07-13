@@ -31,7 +31,7 @@ module V1
                     if (CoursesUser.where(user_id:current_user.id).where(course_id:@topic.course_id).count) == 0
                         render json: { error: 'Not enrolled' }, status: 422
                     else
-                        render json: Question.where(exercise_id:params[:id]), each_serializer: SimpleQuestionSerializer
+                        render json: Question.where(exercise_id:params[:id]), each_serializer: SimplequestionSerializer
                         #render json: { 'question': ActiveModel::Serializer.new(@question, each_serializer: QuestionSerializer).paginate(page: qparams[:page], per_page: 1)}, status:200
                         #json_response(@question)
                     end
@@ -58,12 +58,15 @@ module V1
                         elsif qparams[:opt] == @question.correctoption
                             @res=true
                         end
-                        AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(timetaken: qparams[:timetaken])
-                        AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(markedforreview: qparams[:markedforreview])
-                        AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(attempted: true)
-                        AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(result: @res)
-                        
-                        json_response(AttemptResult.find_by(question_id:params[:id],attempt_id:@attempt.id))
+                        AttemptResult.transaction do
+                            AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(timetaken: qparams[:timetaken])
+                            AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(markedforreview: qparams[:markedforreview])
+                            AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(attempted: true)
+                            AttemptResult.where(question_id:params[:id],attempt_id:@attempt.id).update(result: @res)
+                           # raise ActiveRecord::Rollback
+                        end
+                        render json: AttemptResult.find_by(question_id:params[:id],attempt_id:@attempt.id), serializer:AttemptResult2Serializer
+                    #    json_response(AttemptResult.find_by(question_id:params[:id],attempt_id:@attempt.id))
                     end
                 else
                     render json: { error: 'No such question' }, status: 404
