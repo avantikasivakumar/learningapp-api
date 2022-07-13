@@ -78,6 +78,7 @@ GEM
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.1.10)
+    connection_pool (2.2.5)
     crass (1.0.6)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
@@ -147,6 +148,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3.1)
+    rack-protection (2.2.0)
+      rack
     rack-test (2.0.2)
       rack (>= 1.3)
     rails (7.0.3)
@@ -176,6 +179,7 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
+    redis (3.3.5)
     reline (0.3.1)
       io-console (~> 0.5)
     responders (3.0.1)
@@ -200,6 +204,11 @@ GEM
     rspec-support (3.11.0)
     shoulda-matchers (3.1.3)
       activesupport (>= 4.0.0)
+    sidekiq (4.2.10)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (>= 1.5.0)
+      redis (~> 3.2, >= 3.2.1)
     strscan (3.0.3)
     thor (1.2.1)
     timeout (0.3.0)
@@ -218,6 +227,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
+  activejob
   bootsnap
   database_cleaner
   debug
@@ -230,6 +240,7 @@ DEPENDENCIES
   rails (~> 7.0.3)
   rspec-rails (~> 4.0)
   shoulda-matchers (~> 3.1)
+  sidekiq (~> 4.1, >= 4.1.2)
   tzinfo-data
   will_paginate (~> 3.1.0)
 

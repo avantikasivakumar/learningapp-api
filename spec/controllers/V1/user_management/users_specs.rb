@@ -82,6 +82,20 @@ RSpec.describe 'User management', type: :request do
               expect(response).to have_http_status(201)
             end
         end
+
+        context '(Login by OTP)' do
+
+          let(:valid_attributes) { {grant_type: "otp",mobile:user.mobile,otp:1234}}
+    
+          before { post '/v1/user_management/login', params: valid_attributes, as: :json }
+    
+          it 'Token generated' do
+            expect(json).not_to be_empty
+            expect(json["user"]).not_to be_empty
+            expect(json["token"]).not_to be_empty
+            expect(response).to have_http_status(201)
+          end
+      end
     end
 
     #     let (:email) { users.first.email }

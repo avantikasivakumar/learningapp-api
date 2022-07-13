@@ -65,6 +65,58 @@ module V1
                     user = UserSerializer.new(@user).as_json
 
                     render json: { user: user, token: token } , status: :created
+
+                elsif params[:grant_type] == "otp"
+                    
+                    throw_error("Mobile number is missing.", :unprocessable_entity) if params[:mobile].blank? 
+                    
+                    @user = User.find_by(mobile: params[:mobile])
+                    throw_error("Mobile is not valid!", 401) if @user.blank?
+                   # puts @user.as_json
+                    if @user.otp == nil
+                      #  puts "hi1"
+                      #generate OTP
+                        @otp=4.times.map{rand(9)}.join
+                        @user.otp=@otp#update_attribute(:otp, 1234)
+                        @user.otp_generated_at=DateTime.now
+                        @user.save(:validate => false)
+                        DestroyOtpJob.set(wait: 120.second).perform_later(@user.id)
+                        render json: { message: "OTP sent" } , status: 200
+                      #  puts User.find_by(mobile: params[:mobile]).as_json
+                       # puts "hi2"
+                      #  puts @user.as_json
+                     #   User.where(mobile: params[:mobile]).update(otp_generated_at:DateTime.now)
+                    else
+                        throw_error("OTP is missing.", :unprocessable_entity) if params[:otp].blank? 
+                        a=User.find_by(mobile: params[:mobile]).otp
+                        b=params[:otp].to_i
+                        # puts a.class
+                        # puts b.class
+                      #  puts params[:otp]#User.find_by(mobile: params[:mobile]).otp
+                        if a == b
+                            #   puts "hiiiiii"
+                            access_token = Doorkeeper::AccessToken.create(
+                                resource_owner_id: @user.id,
+                                refresh_token: generate_refresh_token,
+                                expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
+                                scopes: 'user'
+                                    )
+
+                            token = {
+                                access_token: access_token.token,
+                                token_type: 'bearer',
+                                expires_in: access_token.expires_in,
+                                refresh_token: access_token.refresh_token,
+                                created_at: access_token.created_at
+                            }
+
+                            user = UserSerializer.new(@user).as_json
+
+                            render json: { user: user, token: token } , status: :created
+                        else
+                            throw_error("OTP is invalid.", :unprocessable_entity)
+                        end
+                    end
                 end
 
 
@@ -106,7 +158,7 @@ module V1
             protected
 
             def ensure_params_exist
-                params.permit(:email, :password, :refresh_token, :grant_type)
+                params.permit(:email, :password, :refresh_token, :grant_type, :mobile, :otp)
                 #     return unless params[:user].blank?
                 #     render json: {status: "failed", message: "Missing User Parameter"}
             end
